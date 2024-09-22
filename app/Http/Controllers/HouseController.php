@@ -88,7 +88,8 @@ class HouseController extends Controller
 
     public function show($id){
 
-        $house = House::findOrFail($id);
+        // $house = House::findOrFail($id);
+        $house = House::with('fasilitas')->findOrFail($id);
         return view('Houses.show',compact('house'));
     }
     // Fungsi untuk menghapus rumah

@@ -34,7 +34,7 @@
         </a>
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive shadow-sm p-3 mb-5 bg-white rounded">
         <table class="table table-hover table-striped align-middle">
             <thead class="table-dark" border="1">
                 <tr>
@@ -49,7 +49,7 @@
             </thead>
             <tbody>
                 @foreach ($houses as $house)
-                <tr>
+                <tr class="shadow-sm">
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td>{{ $house->address }}</td>
                     <td>Rp {{ number_format($house->price, 0, ',', '.') }}</td>
@@ -60,28 +60,25 @@
                     </td>
                     <td>
                         <h6 class="bold" >{{ $house->tipe }}</h6>
-                        {{-- <span class="badge {{ $house->tipe == 'house' ? 'bg-success' : 'bg-danger' }}">
-                            {{ ucfirst($house->tipe) }}
-                        </span> --}}
                     </td>
                     <td>
                         @if($house->image)
-                        <img src="{{ asset('storage/' . $house->image) }}" alt="House Image" class="img-thumbnail" style="max-width: 120px;">
+                        <img src="{{ asset('storage/' . $house->image) }}" alt="House Image" class="img-thumbnail shadow-sm" style="max-width: 120px; border-radius: 8px;">
                         @else
                         <span class="text-muted">Tidak ada gambar</span>
                         @endif
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('houses.show', $house->id) }}" class="btn btn-info btn-sm mx-1">
+                        <a href="{{ route('houses.show', $house->id) }}" class="btn btn-info btn-sm mx-1 shadow-sm">
                             <i class="bx bx-show"></i> Lihat
                         </a>
-                        <a href="{{ route('houses.edit', $house->id) }}" class="btn btn-warning btn-sm mx-1">
+                        <a href="{{ route('houses.edit', $house->id) }}" class="btn btn-warning btn-sm mx-1 shadow-sm">
                             <i class="bx bx-edit"></i> Edit
                         </a>
                         <form action="{{ route('houses.destroy', $house->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm mx-1" 
+                            <button type="submit" class="btn btn-danger btn-sm mx-1 shadow-sm" 
                                 onclick="return confirm('Yakin ingin menghapus rumah ini?')">
                                 <i class="bx bx-trash"></i> Hapus
                             </button>

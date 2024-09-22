@@ -9,9 +9,14 @@ class Fasilitas extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'house_id',
+        'description',
+    ];
 
-    public function houses(){
-        return $this->hasMany(House::class);
+    public function house(){
+        return $this->belongsTo(House::class);
     }
     public function sales(){
         return $this->hasMany(sale::class);
