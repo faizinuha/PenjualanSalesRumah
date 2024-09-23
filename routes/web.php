@@ -3,13 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\SaleController;
+// use App\Http\Controllers\SaleController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\FasilitasController;
-
+use App\Http\Controllers\SaleController;
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('sales', SaleController::class);
 Auth::routes();
 
 Route::resource('sales', SaleController::class);

@@ -49,4 +49,8 @@ class User extends Authenticatable
         
         return $this->hasMany(Sale::class);
     }
+    public function house(){
+        
+        return $this->belongsTo(Sale::class);
+    }
 }

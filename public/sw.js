@@ -46,11 +46,21 @@ const returnFromCache = function (request) {
     });
 };
 
+// self.addEventListener("fetch", function (event) {
+//     event.respondWith(checkResponse(event.request).catch(function () {
+//         return returnFromCache(event.request);
+//     }));
+//     if(!event.request.url.startsWith('http')){
+//         event.waitUntil(addToCache(event.request));
+//     }
+// });
 self.addEventListener("fetch", function (event) {
-    event.respondWith(checkResponse(event.request).catch(function () {
-        return returnFromCache(event.request);
-    }));
-    if(!event.request.url.startsWith('http')){
+    const requestUrl = new URL(event.request.url);
+
+    if (requestUrl.protocol === "http:" || requestUrl.protocol === "https:") {
+        event.respondWith(checkResponse(event.request).catch(function () {
+            return returnFromCache(event.request);
+        }));
         event.waitUntil(addToCache(event.request));
     }
-});
+})

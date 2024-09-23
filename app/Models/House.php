@@ -17,6 +17,11 @@ class House extends Model
     ];
     // protected $fillable = [
     //     ]
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);   
+    }
     public function sales()
     {
         return $this->hasMany(Sale::class);

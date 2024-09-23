@@ -8,6 +8,9 @@
                 <!-- Informasi Rumah -->
                 <div class="col-md-6">
                     <div class="mb-4">
+                        <caption>Name Sales: @foreach ($house->sales as $sale)
+                            {{$sale->user->name}}
+                        @endforeach</caption>
                         <h4 class="text-primary mb-3">Alamat: {{ $house->address }}</h4>
                         <p class="fs-5">Harga: <strong>Rp {{ number_format($house->price, 0, ',', '.') }}</strong></p>
                         <p>Status: 

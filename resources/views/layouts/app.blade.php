@@ -77,6 +77,7 @@
                                     </a>
                                     <a href="{{ route('houses.index') }}" class="dropdown-item">House</a>
                                     <a href="{{ route('fasilitas.index') }}" class="dropdown-item">fasilitas</a>
+                                    <a href="{{ route('sales.index') }}" class="dropdown-item">sales</a>
 
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

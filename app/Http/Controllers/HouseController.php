@@ -90,12 +90,16 @@ class HouseController extends Controller
 
         // $house = House::findOrFail($id);
         $house = House::with('fasilitas')->findOrFail($id);
+
+        // dd($house->sales->user);
         return view('Houses.show',compact('house'));
     }
     // Fungsi untuk menghapus rumah
     public function destroy($id)
     {
         $house = House::findOrFail($id);
+
+
 
         // Jika ada gambar yang tersimpan, hapus dari direktori
         if ($house->image) {
