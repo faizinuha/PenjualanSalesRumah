@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
@@ -26,14 +27,22 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
             'user_id' => 'required',
             'house_id' => 'required',
-            // 'fasilitas_id' => 'required',
             'sale_date' => 'required|date',
             'total_price' => 'required|integer',
         ]);
 
+        // Cek apakah rumah sudah terjual
+        $existingSale = Sale::where('house_id', $request->house_id)->first();
+
+        if ($existingSale) {
+            return redirect()->back()->with('error', 'Rumah ini sudah terjual!');
+        }
+
+        // Simpan penjualan jika rumah belum terjual
         Sale::create($request->all());
 
         return redirect()->route('sales.index')->with('success', 'Penjualan berhasil disimpan!');

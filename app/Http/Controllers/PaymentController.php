@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\House;
 use App\Models\Payment;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +39,10 @@ class PaymentController extends Controller
             'user_id' => Auth::user()->id,
             'amount' => $request->amount,
             'payment_method' => $request->payment_method, // Store payment method
+        ]);
+        $transactions = Transaction::create([
+            'payment_id' => $payment->id,
+            'transaction_status' => 'success',
         ]);
 
         // Update the house status to "sold"

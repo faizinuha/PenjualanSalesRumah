@@ -22,4 +22,7 @@ class Payment extends Model
     {
         return $this->belongsTo(House::class);
     }
+    public function Transaction(){
+        return $this->belongsTo(Transaction::class);
+    }
 }
