@@ -26,7 +26,7 @@ class fasilitasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            // 'name' => 'required',
             'house_id' => 'required|exists:houses,id',
             'description' => 'nullable',
         ]);
@@ -46,7 +46,7 @@ class fasilitasController extends Controller
     public function update(Request $request, Fasilitas $fasilita)
     {
         $request->validate([
-            'name' => 'required',
+            // 'name' => 'required',
             'house_id' => 'required|exists:houses,id',
             'description' => 'nullable',
         ]);

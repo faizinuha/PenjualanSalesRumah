@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('house_id')->constrained('houses')->onDelete('cascade');
-            $table->foreignId('fasilitas_id')->constrained('fasilitas')->onDelete('cascade');
+            // $table->foreignId('fasilitas_id')->constrained('fasilitas')->onDelete('cascade');
             $table->date('sale_date');
             $table->integer('total_price');
             $table->timestamps();

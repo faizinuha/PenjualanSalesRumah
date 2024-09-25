@@ -60,14 +60,14 @@
             </select>
           </div>
 
-          <div class="mb-3">
+          {{-- <div class="mb-3">
             <label for="fasilitas_id" class="form-label">Fasilitas</label>
             <select name="fasilitas_id" class="form-select">
               @foreach($fasilitas as $fasilitas)
                 <option value="{{ $fasilitas->id }}">{{ $fasilitas->name }}</option>
               @endforeach
             </select>
-          </div>
+          </div> --}}
 
           <div class="mb-3">
             <label for="sale_date" class="form-label">Tanggal Penjualan</label>

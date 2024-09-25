@@ -9,13 +9,13 @@ class Sale extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'house_id', 'fasilitas_id', 'sale_date', 'total_price'];
+    protected $fillable = ['user_id', 'house_id','sale_date', 'total_price'];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+    
     public function house()
     {
         return $this->belongsTo(House::class);

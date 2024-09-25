@@ -36,13 +36,10 @@
 
                             <div class="form-group mb-4">
                                 <label for="image" class="form-label">Gambar Rumah</label>
-                                <input type="file" name="image" class="form-control">
-                                {{-- @if($house->image)
-                                <img src="{{ asset('storage/' . $house->image) }}" alt="House Image" class="mt-2" style="max-width: 200px;">
-                            @endif --}}
+                                <input type="file" name="image" class="form-control" id="imageInput" accept="image/*" onchange="previewImage(event)">
+                                <img id="preview" src="#" alt="Preview Gambar" class="mt-3" style="max-width: 200px; display:none;">
                             </div>
-
-                            <div class="d-grid gap-2">
+                            <div class="d-grid gap-2 m-2">
                                 <button type="submit" class="btn btn-primary btn-block">Upload Rumah</button>
                             </div>
                         </form>
@@ -52,3 +49,17 @@
         </div>
     </div>
 @endsection
+    <script>
+    function previewImage(event) {
+        var image = document.getElementById('preview');
+        var reader = new FileReader();
+
+        reader.onload = function(){
+            if(reader.readyState == 2){
+                image.src = reader.result;
+                image.style.display = 'block';  // Menampilkan gambar
+            }
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>

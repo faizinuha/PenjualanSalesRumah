@@ -1,18 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
+
 @if (session('success'))
-<div class="bs-toast toast fade show bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-        <i class="bx bx-bell me-2"></i>
-        <div class="me-auto fw-semibold">Anime</div>
-        <small></small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-        {{ session('success') }}
-    </div>
-</div>
+        <div class="toast-container position-fixed top-5 end--1 p-2" style="z-index: 11">
+            <div class="toast align-items-center text-bg-success border-0 show slide-down" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {{ session('success') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    <style>
+          .toast-container {
+            max-width: 300px;
+        }
+
+        .slide-down {
+            animation: slide-down 2s ease 0s 1 normal forwards;
+        }
+
+        @keyframes slide-down {
+            from {
+                transform: translateZ(-9.7rem);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-out {
+            animation: fade-out 1s ease forwards;
+        }
+
+        @keyframes fade-out {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+    </style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var toastElList = [].slice.call(document.querySelectorAll('.toast'));

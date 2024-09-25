@@ -8,10 +8,10 @@
         @csrf
         @method('PUT')
 
-        <div class="mb-3">
+        {{-- <div class="mb-3">
             <label for="name" class="form-label">Nama Fasilitas</label>
             <input type="text" name="name" id="name" class="form-control" value="{{ $fasilita->name }}" required>
-        </div>
+        </div> --}}
 
         <div class="mb-3">
             <label for="house_id" class="form-label">Pilih Rumah</label>

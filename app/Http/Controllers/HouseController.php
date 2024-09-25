@@ -20,11 +20,13 @@ class HouseController extends Controller
     {
         // Validasi data
         $request->validate([
-            'address' => 'required|string|max:255',
+            'address' => 'required|string|max:255|unique:Houses,address,id',
             'price' => 'required|integer',
             'status' => 'required|in:sold,available',
             'image' => 'required|mimes:jpeg,png,jpg', // Validasi gambar
             'tipe' => 'required|in:apartement,house',
+        ],[
+            'address.unique' => 'Alamat rumah ini sudah terdaftar. Silakan masukkan alamat yang berbeda.',
         ]);
 
 
@@ -38,7 +40,7 @@ class HouseController extends Controller
             'image' => $imageStore,
             'tipe' => $request->tipe
         ]);
-
+        // validate error
         return redirect()->route('houses.index')->with('success', 'House created successfully.');
     }
 
@@ -63,11 +65,13 @@ class HouseController extends Controller
 
         // Validasi data input
         $request->validate([
-            'address' => 'required|string|max:255',
+            'address' => 'required|string|max:255|unique:Houses,address,id',
             'price' => 'required|integer',
             'status' => 'required|in:sold,available',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
             'tipe' => 'required|in:apartement,house',
+        ],[
+            'address.unique' => 'Alamat rumah ini sudah terdaftar. Silakan masukkan alamat yang berbeda.',
         ]);
 
         // Jika ada gambar baru yang diunggah

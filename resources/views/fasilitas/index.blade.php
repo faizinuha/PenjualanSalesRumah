@@ -24,7 +24,7 @@
             <div class="col-md-6">
                 <div class="card mb-4 shadow-sm border-0 rounded-3" style="background-color:gray;">
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">Status Fasilitas:{{ $f->name }}</h5>
+                        {{-- <h5 class="card-title fw-bold">Status Fasilitas:{{ $f->name }}</h5> --}}
                         <p class="card-text">Deskripsi:{{ $f->description }}</p>
                         
                         <!-- Informasi Rumah terkait -->

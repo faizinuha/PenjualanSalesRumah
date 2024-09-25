@@ -10,7 +10,6 @@ class Fasilitas extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'house_id',
         'description',
     ];

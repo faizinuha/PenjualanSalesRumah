@@ -29,7 +29,7 @@ class SaleController extends Controller
         $request->validate([
             'user_id' => 'required',
             'house_id' => 'required',
-            'fasilitas_id' => 'required',
+            // 'fasilitas_id' => 'required',
             'sale_date' => 'required|date',
             'total_price' => 'required|integer',
         ]);

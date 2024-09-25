@@ -78,7 +78,7 @@
             <tr>
                 <th>Sales Agent</th>
                 <th>lokasi</th>
-                <th>Fasilitas</th>
+                {{-- <th>Fasilitas</th> --}}
                 <th>Tanggal Penjualan</th>
                 <th>Total Harga</th>
             </tr>
@@ -88,7 +88,7 @@
                 <tr>
                     <td>{{ $sale->user->name }}</td>
                     <td>{{ $sale->house->address }}</td>
-                    <td>{{ $sale->fasilitas->name }}</td>
+                    {{-- <td>{{ $sale->fasilitas->name }}</td> --}}
                     <td>{{ $sale->sale_date }}</td>
                     <td>Rp {{ number_format($sale->total_price, 0, ',', '.') }}</td>
                 </tr>
