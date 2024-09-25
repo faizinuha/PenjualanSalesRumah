@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sale_id')->constrained('sales')->onDelete('cascade');
+            $table->foreignId('house_id')->constrained('houses')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->integer('amount');
-            $table->string('payment_method');
+            $table->enum('payment_method', ['atm', 'Tunai','Kartu Kredit'])->default('Tunai'); // Status rumah: sold atau available
+            // $table->string('payment_method');
             $table->timestamps();
         });
     }

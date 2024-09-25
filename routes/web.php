@@ -10,11 +10,15 @@ use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\SaleController;
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 Route::resource('sales', SaleController::class);
+Route::get('payments/create/{id}', [PaymentController::class, 'create'])->name('payments.create');
+Route::post('payments/store', [PaymentController::class, 'store'])->name('payments.store');
+
 Auth::routes();
 
 Route::resource('sales', SaleController::class);
-Route::resource('payments', PaymentController::class);
 Route::resource('fasilitas', fasilitasController::class);
 Route::get('houses', [HouseController::class, 'index'])->name('houses.index');
 Route::get('houses/create', [HouseController::class, 'create'])->name('houses.create');

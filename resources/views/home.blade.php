@@ -102,7 +102,7 @@
                                     <h6 class="card-subtitle mb-2 text-muted">Status: <span class="badge bg-{{ $i->status === 'available' ? 'success' : 'danger' }}">{{ ucfirst($i->status) }}</span></h6>
                                     <h6 class="card-subtitle mb-2 text-muted">Tipe: {{ ucfirst($i->tipe) }}</h6>
                                     <p class="price">Rp {{ number_format($i->price, 0, ',', '.') }}</p>
-                                    <a href="{{ route('houses.show', $i->id) }}" class="btn btn-primary w-100">Lihat Detail</a>
+                                    <a href="{{ route('houses.show', $i->id) }}" class="btn btn-primary w-100">Detail Rumah</a>
                                 </div>
                             </div>
                         @empty
