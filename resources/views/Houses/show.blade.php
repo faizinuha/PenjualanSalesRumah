@@ -11,29 +11,41 @@
                         <h4 class="text-primary mb-3">Alamat: {{ $house->address }}</h4>
                         <p class="fs-5">Harga: <strong>Rp {{ number_format($house->price, 0, ',', '.') }}</strong></p>
 
-                        @forelse ($house->sales as $sale)
-                            <p class="fs-5">Total: <strong>{{ number_format($sale->total_price, 0, ',', '.') }}</strong></p>
-                        @empty
-                            <p class="text-muted">Belum ada penjualan.</p>
-                        @endforelse
-
-                        <!-- Status Rumah -->
-                        <p>Status:
-                            <span class="badge {{ $house->status == 'available' ? 'bg-success' : 'bg-danger' }}">
-                                <i class="fas {{ $house->status == 'available' ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                                {{ ucfirst($house->status) }}
-                            </span>
-                        </p>
-
-                        <!-- Nama Sales -->
-                        <p>Nama Sales:
+                        <p>
                             <strong>
-                                @foreach ($house->sales as $sale)
-                                    {{ $sale->user->name }}@if(!$loop->last), @endif
-                                @endforeach
+                                @forelse ($house->sales as $sale)
+                                    <p class="fs-5">Total | Admin:Rp.{{ number_format($sale->total_price, 0, ',', '.') }}
+                                    </p>
+                                @empty
+                                    <p class="text-muted">Belum ada penjualan.</p>
+                                @endforelse
                             </strong>
                         </p>
 
+                        <!-- Status Rumah -->
+
+                        <!-- Nama Sales -->
+                        <p>
+                            <strong>
+                                {{-- @foreach ($house->sales as $sale)
+                                    {{ $sale->user->name }}@if (!$loop->last), @endif
+                                @endforeach --}}
+                                @forelse ($house->sales as $sale)
+                                    Nama | Sales: {{ $sale->user->name }}@if (!$loop->last)
+                                    @endif
+                                @empty
+                                    <p class="small">Nama Sales belum Ada </p>
+                                @endforelse
+                            </strong>
+                        </p>
+
+                        <p>Status:
+                            <span class="badge {{ $house->status == 'available' ? 'bg-success' : 'bg-danger' }}">
+                                <i
+                                    class="fas {{ $house->status == 'available' ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                {{ ucfirst($house->status) }}
+                            </span>
+                        </p>
                         <h6 class="text-primary mb-3">Tipe Rumah: {{ $house->tipe }}</h6>
 
                         <!-- Fasilitas -->
@@ -50,7 +62,8 @@
                                                     <i class="fas fa-home fa-2x text-primary"></i> <!-- Icon fasilitas -->
                                                 </div>
                                                 <div>
-                                                    <h5 class="card-title mb-1">{{ $fasilitas->name }}</h5> <!-- Added title for facility -->
+                                                    <h5 class="card-title mb-1">{{ $fasilitas->name }}</h5>
+                                                    <!-- Added title for facility -->
                                                     <p class="card-text text-muted">{{ $fasilitas->description }}</p>
                                                 </div>
                                             </div>
@@ -74,29 +87,54 @@
                 </div>
             </div>
 
-            <!-- Tombol Kembali dan Beli -->
             <div class="mt-4 d-flex justify-content-between">
                 <a onclick="history.back()" class="btn btn-outline-primary px-4 py-2">
                     <i class="fas fa-arrow-left"></i> Kembali ke Daftar Rumah
                 </a>
-                <a href="{{route('payments.create', $house->id)}}" class="btn btn-success px-4 py-2" id="sold">
+
+                <a href="{{ route('payments.create', $house->id) }}" class="btn btn-success px-4 py-2" id="sold">
                     <i class="fas fa-shopping-cart"></i> Beli
                 </a>
-                {{-- {{ route('buy.house', $house->id) }} --}}
             </div>
+
+            <script>
+                document.getElementById('sold').addEventListener('click', function(event) {
+                    @if ($house->sales->isEmpty() || $house->sales->contains('total_price', null))
+                        event.preventDefault(); // Mencegah link mengarah ke route
+                        alert('Nama Sales atau Total Harga belum ditentukan, transaksi tidak dapat dilakukan.');
+                    @endif
+                });
+
+                var fasilitasKosong = {{ $house->fasilitas->isEmpty() ? 'true' : 'false' }};
+                var fasilitasDeskripsiNull = {{ $house->fasilitas->contains('description', null) ? 'true' : 'false' }};
+
+                document.getElementById('sold').addEventListener('click', function(event) {
+                    if (fasilitasKosong || fasilitasDeskripsiNull) {
+                        // Menampilkan pesan konfirmasi meskipun kondisi fasilitas belum lengkap
+                        var confirmation = confirm('Fasilitas belum di setting. Yakin mau beli rumah ini?');
+                        if (!confirmation) {
+                            // Jika pengguna memilih "Tidak", mencegah pembelian
+                            event.preventDefault();
+                        }
+                    }
+                });
+            </script>
+
+
         </div>
     </div>
-    @if($house->status == 'sold')
-    <script>
-        document.getElementById('sold').addEventListener('click', function (event) {
-            event.preventDefault();
-            alert('Rumah ini sudah terjual!');
-        });
+    @if ($house->status == 'sold')
+        <script>
+            document.getElementById('sold').addEventListener('click', function(event) {
+                event.preventDefault();
+                alert('Rumah ini sudah terjual!');
+            });
 
-        // Men-disable tombol beli
-        document.getElementById('sold').disabled = true;
-    </script>
-@endif
+            // Men-disable tombol beli
+            document.getElementById('sold').disabled = true;
+        </script>
+    @endif
+
 @endsection
 
 <style>

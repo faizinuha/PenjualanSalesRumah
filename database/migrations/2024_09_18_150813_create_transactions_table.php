@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            
             $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade');
             // $table->string('transaction_status');
             $table->enum('transaction_status', ['success',])->default('success'); // Status rumah: sold atau available

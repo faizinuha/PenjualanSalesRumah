@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\Payment;
+use App\Models\House;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -13,8 +14,10 @@ class TransactionController extends Controller
     {
         // Ambil semua transaksi beserta data pembayaran yang terkait
         $transactions = Transaction::with('payment')->get();
+        // $transactions = House::where('image')->get();
         return view('transactions.index', compact('transactions'));
     }
+    
     public function history()
     {
         // Mengambil semua transaksi yang berstatus berhasil

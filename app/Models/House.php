@@ -33,4 +33,7 @@ class House extends Model
     public function fasilitas(){
         return $this->hasMany(Fasilitas::class,);
     }
+    // public function Transaction(){
+    //     return $this->hasMany(Transaction::class);
+    // }
 }

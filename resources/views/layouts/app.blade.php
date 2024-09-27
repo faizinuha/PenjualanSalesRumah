@@ -77,6 +77,34 @@
         .navbar-toggler-icon {
             background-image: url('data:image/svg+xml;charset=utf8,%3Csvg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath stroke="rgba%28255, 255, 255, 0.7%29" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
         }
+
+        /* Form Search Styling */
+        .nav-search-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-search-input {
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+
+        .nav-search-button {
+            border: none;
+            border-radius: 0 5px 5px 0;
+            padding: 6px 12px;
+            font-size: 14px;
+            background-color: #47c9e5;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        .nav-search-button:hover {
+            background-color: #3ab0d5;
+        }
     </style>
 </head>
 
@@ -96,6 +124,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <form action="{{ route('home') }}" method="GET" class="nav-search-form">
+                                <input type="text" name="query" placeholder="Cari transaksi"
+                                    class="nav-search-input form-control">
+                                <button type="submit" class="nav-search-button btn btn-outline-light">Cari</button>
+                            </form>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -110,14 +145,21 @@
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link"
+                                        href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
-                        <!-- Profile Dropdown -->
-                        <li class="nav-item">
-                            <a href="{{route('transactions.history') }}" class="nav-link" >Pesanan</a>
-                        </li>
+                            <!-- Profile Dropdown -->
+                            @php
+                                $count = App\models\Transaction::count();
+                            @endphp
+                            <li class="nav-item">
+                                <span><a href="{{ route('transactions.history') }}"
+                                        class="nav-link">History <span>{{ $count }}</span>
+                                    </a></span>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -126,15 +168,15 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
                                     <a href="{{ route('houses.index') }}" class="dropdown-item">House</a>
                                     <a href="{{ route('fasilitas.index') }}" class="dropdown-item">Fasilitas</a>
                                     <a href="{{ route('sales.index') }}" class="dropdown-item">Sales</a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -158,7 +200,7 @@
                 },
                 (error) => {
                     console.error(`Service worker registration failed: ${error}`);
-                },
+                }
             );
         } else {
             console.error("Service workers are not supported.");
