@@ -11,7 +11,7 @@
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         @if (session('error'))
-            <div class="toast-container position-fixed top-5 end--1 p-2" style="z-index: 11">
+            <div class="toast-container position-fixed top-5 end-1 p-2" style="z-index: 11">
                 <div class="toast align-items-center text-bg-danger border-0 show slide-down" role="alert"
                     aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
@@ -32,7 +32,7 @@
                     toastList.forEach(toast => toast.show());
                 });
             </script>
-        @endif
+        @endif  
 
         <style>
             .toast-container {
@@ -111,7 +111,9 @@
                                 <label for="user_id" class="form-label">Sales Agent</label>
                                 <select name="user_id" class="form-select">
                                     @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -120,29 +122,25 @@
                                 <label for="house_id" class="form-label">Rumah</label>
                                 <select name="house_id" class="form-select">
                                     @foreach ($houses as $house)
-                                        <option value="{{ $house->id }}">{{ $house->address }}</option>
+                                        <option value="{{ $house->id }}" {{ old('house_id') == $house->id ? 'selected' : '' }}>
+                                            {{ $house->address }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
 
-                            {{-- <div class="mb-3">
-            <label for="fasilitas_id" class="form-label">Fasilitas</label>
-            <select name="fasilitas_id" class="form-select">
-              @foreach ($fasilitas as $fasilitas)
-                <option value="{{ $fasilitas->id }}">{{ $fasilitas->name }}</option>
-              @endforeach
-            </select>
-          </div> --}}
-
                             <div class="mb-3">
                                 <label for="sale_date" class="form-label">Tanggal Penjualan</label>
-                                <input type="date" name="sale_date" class="form-control">
+                                <input type="date" name="sale_date" class="form-control" value="{{ old('sale_date') }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="total_price" class="form-label">Total Harga</label>
                                 <input type="number" name="total_price" class="form-control"
-                                    placeholder="Enter total price">
+                                    placeholder="Enter total price" value="{{ old('total_price') }}">
+                                @error('total_price')
+                                    <div class="text-danger">{{ $message }}</div> <!-- Pesan error validasi -->
+                                @enderror
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100">Simpan Penjualan</button>

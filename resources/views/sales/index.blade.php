@@ -157,7 +157,7 @@
                             <strong>Tanggal Penjualan:</strong> {{ $sale->sale_date }}<br>
                             <strong>Total Harga:</strong> Rp {{ number_format($sale->total_price, 0, ',', '.') }}
                         </p>
-                        {{-- <a href="#" class="btn btn-custom">Lihat Detail</a> --}}
+                        <a href="{{route('sales.edit', $sale->id)}}" class="btn btn-custom">Lihat Detail</a>
                     </div>
                 </div>
             </div>

@@ -12,24 +12,26 @@ class HouseController extends Controller
     public function create()
     {
         $house = House::all();
-        return view('houses.create',compact('house'));
+        return view('houses.create', compact('house'));
     }
 
     // Fungsi untuk menyimpan data rumah baru
     public function store(Request $request)
     {
-        // Validasi data
+        // Validasi data di server-side
         $request->validate([
             'address' => 'required|string|max:255|unique:Houses,address,id',
-            'price' => 'required|integer',
+            'price' => 'required|integer|min:0|max:999999999', // Validasi harga antara 0 hingga 10 juta
             'status' => 'required|in:sold,available',
             'image' => 'required|mimes:jpeg,png,jpg', // Validasi gambar
             'tipe' => 'required|in:apartement,house',
-        ],[
+        ], [
             'address.unique' => 'Alamat rumah ini sudah terdaftar. Silakan masukkan alamat yang berbeda.',
+            'price.min' => 'Harga tidak boleh negatif.', // Pesan error harga negatif
+            'price.max' => 'Harga tidak boleh lebih dari 10.000.000.', // Pesan error harga terlalu tinggi
         ]);
 
-
+        // Simpan gambar
         $imageStore = $request->file('image')->store('house', 'public');
 
         // Simpan data rumah
@@ -38,10 +40,10 @@ class HouseController extends Controller
             'price' => $request->price,
             'status' => $request->status,
             'image' => $imageStore,
-            'tipe' => $request->tipe
+            'tipe' => $request->tipe,
         ]);
-        // validate error
-        return redirect()->route('houses.index')->with('success', 'House created successfully.');
+
+        return redirect()->route('houses.index')->with('success', 'Data Rumah Berhasil di Buat!');
     }
 
     // Fungsi untuk menampilkan daftar rumah
@@ -59,51 +61,61 @@ class HouseController extends Controller
     }
 
     // Fungsi untuk memperbarui data rumah
-    public function update(Request $request, $id)
-    {
-        $house = House::findOrFail($id);
+   // Fungsi untuk memperbarui data rumah
+public function update(Request $request, $id)
+{
+    $house = House::findOrFail($id);
 
-        // Validasi data input
-        $request->validate([
-            'address' => 'required|string|max:255|unique:Houses,address,id',
-            'price' => 'required|integer',
-            'status' => 'required|in:sold,available',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
-            'tipe' => 'required|in:apartement,house',
-        ],[
-            'address.unique' => 'Alamat rumah ini sudah terdaftar. Silakan masukkan alamat yang berbeda.',
-        ]);
+    // Validasi data input
+    $request->validate([
+        'address' => 'required|string|max:255|unique:Houses,address,' . $id,
+        'price' => 'required|integer|min:0|max:999999999', // Validasi harga antara 0 hingga 10 juta
+        'status' => 'required|in:sold,available',
+        'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
+        'tipe' => 'required|in:apartement,house',
+    ], [
+        'address.unique' => 'Alamat rumah ini sudah terdaftar. Silakan masukkan alamat yang berbeda.',
+        'price.min' => 'Harga tidak boleh negatif.', // Pesan error untuk harga negatif
+        'price.max' => 'Harga tidak boleh lebih dari 10.000.000.', // Pesan error harga terlalu tinggi
+    ]);
 
-        // Jika ada gambar baru yang diunggah
-        if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('storage/'), $imageName);
-            $house->image = $imageName; // Simpan nama file gambar baru
+    // Jika ada gambar baru yang diunggah
+    if ($request->hasFile('image')) {
+        // Hapus gambar lama jika ada
+        if ($house->image) {
+            $imagePath = public_path('storage/' . $house->image);
+            if (file_exists($imagePath)) {
+                unlink($imagePath); // Hapus gambar lama dari storage
+            }
         }
 
-        // Perbarui data rumah
-        $house->address = $request->address;
-        $house->price = $request->price;
-        $house->status = $request->status;
-        $house->save();
-
-        return redirect()->route('houses.index')->with('success', 'Data rumah berhasil diperbarui.');
+        // Simpan gambar baru
+        $imageStore = $request->file('image')->store('house', 'public');
+        $house->image = $imageStore; // Simpan nama file gambar baru
     }
 
-    public function show($id){
+    // Perbarui data rumah tanpa mengganti gambar jika tidak ada gambar baru
+    $house->address = $request->address;
+    $house->price = $request->price;
+    $house->status = $request->status;
+    $house->tipe = $request->tipe; // Pastikan tipe juga diperbarui jika perlu
+    $house->save();
 
-        // $house = House::findOrFail($id);
+    return redirect()->route('houses.index')->with('success', 'Data rumah berhasil diperbarui.');
+}
+
+
+    // Fungsi untuk menampilkan detail rumah
+    public function show($id)
+    {
         $house = House::with('fasilitas')->findOrFail($id);
-
-        // dd($house->sales->user);
-        return view('Houses.show',compact('house'));
+        return view('Houses.show', compact('house'));
     }
+
     // Fungsi untuk menghapus rumah
     public function destroy($id)
     {
         $house = House::findOrFail($id);
-
-
 
         // Jika ada gambar yang tersimpan, hapus dari direktori
         if ($house->image) {

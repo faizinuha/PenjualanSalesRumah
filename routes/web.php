@@ -13,13 +13,15 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::resource('sales', SaleController::class);
 Route::get('payments/create/{id}', [PaymentController::class, 'create'])->name('payments.create');
 Route::post('payments/store', [PaymentController::class, 'store'])->name('payments.store');
 Route::get('/transactions/history', [TransactionController::class, 'history'])->name('transactions.history');
+Route::resource('transactions', TransactionController::class);
+
 
 Auth::routes();
 
+// Route::resource('sales', SaleController::class);
 Route::resource('sales', SaleController::class);
 Route::resource('fasilitas', fasilitasController::class);
 Route::get('houses', [HouseController::class, 'index'])->name('houses.index');
