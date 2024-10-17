@@ -30,7 +30,19 @@ class TransactionController extends Controller
     // Hapus transaksi dari database
     public function destroy(Transaction $transaction)
     {
+        // Ambil house_id dari transaksi yang akan dihapus
+        $houseId = $transaction->payment->house_id;
+    
+        // Hapus transaksi dari database
         $transaction->delete();
-        return redirect()->route('transactions.history')->with('success', 'Transaction deleted successfully.');
-    }
+    
+        // Update status rumah kembali ke 'available'
+        $house = House::find($houseId);
+        if ($house) {
+            $house->status = 'available'; // Mengubah status rumah
+            $house->save(); // Simpan perubahan
+        }
+    
+        return redirect()->route('transactions.history')->with('success', 'History Berhasil di Hapus!');
+    }    
 }

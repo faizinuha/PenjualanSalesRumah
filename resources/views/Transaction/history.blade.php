@@ -2,6 +2,64 @@
 
 @section('content')
 
+@if (session('success'))
+        <div class="toast-container position-fixed top-5 end--1 p-2" style="z-index: 11">
+            <div class="toast align-items-center text-bg-success border-0 show slide-down" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {{ session('success') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    <style>
+          .toast-container {
+            max-width: 300px;
+        }
+
+        .slide-down {
+            animation: slide-down 2s ease 0s 1 normal forwards;
+        }
+
+        @keyframes slide-down {
+            from {
+                transform: translateZ(-9.7rem);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-out {
+            animation: fade-out 1s ease forwards;
+        }
+
+        @keyframes fade-out {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        var toastList = toastElList.map(function(toastEl) {
+            return new bootstrap.Toast(toastEl, {
+                delay: 3000
+            });
+        });
+        toastList.forEach(toast => toast.show());
+    });
+</script>
+@endif
     <div class="container mt-5">
         <h1 class="text-center mb-4">Riwayat Transaksi</h1>
         <div class="row">

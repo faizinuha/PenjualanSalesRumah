@@ -32,7 +32,15 @@ class PaymentController extends Controller
             'amount' => 'required|numeric|min:1',
             'payment_method' => 'required|in:atm,Tunai,Kartu Kredit', // Ensure valid payment methods
         ]);
-
+    
+        // Fetch the house to get its price
+        $house = House::find($request->house_id);
+    
+        // Validate the payment amount against the house price
+        if ($request->amount < $house->price) {
+            return redirect()->back()->with('errror', 'Jumlah pembayaran kurang dari harga rumah.');
+        }
+    
         // Create a new payment
         $payment = Payment::create([
             'house_id' => $request->house_id,
@@ -40,17 +48,19 @@ class PaymentController extends Controller
             'amount' => $request->amount,
             'payment_method' => $request->payment_method, // Store payment method
         ]);
-        $transactions = Transaction::create([
+    
+        // Create a transaction
+        $transaction = Transaction::create([
             'payment_id' => $payment->id,
             'transaction_status' => 'success',
         ]);
-
+    
         // Update the house status to "sold"
-        $house = House::find($request->house_id);
         $house->status = 'sold';
         $house->save();
-
+    
         // Redirect with success message
         return redirect()->route('houses.index')->with('success', 'Pembayaran berhasil, status rumah telah berubah menjadi terjual.');
     }
+    
 }

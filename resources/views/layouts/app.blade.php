@@ -174,7 +174,7 @@
                                     <a href="{{ route('houses.index') }}" class="dropdown-item">House</a>
                                     <a href="{{ route('fasilitas.index') }}" class="dropdown-item">Fasilitas</a>
                                     <a href="{{ route('sales.index') }}" class="dropdown-item">Sales</a>
-
+                                                
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                         class="d-none">
                                         @csrf

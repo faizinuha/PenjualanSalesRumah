@@ -12,8 +12,7 @@ class SaleController extends Controller
 {
     public function index()
     {
-        $sales = Sale::with(['user', 'house', 'fasilitas'])->get();
-
+        $sales = Sale::with(['user', 'house'])->get();
         return view('sales.index', compact('sales'));
     }
 
@@ -21,27 +20,24 @@ class SaleController extends Controller
     {
         $users = User::all();
         $houses = House::all();
-        $fasilitas = Fasilitas::all();
-        return view('sales.create', compact('users', 'houses', 'fasilitas'));
+        return view('sales.create', compact('users', 'houses'));
     }
 
     public function store(Request $request)
     {
-        // Validasi input termasuk validasi total_price tidak boleh negatif, min dan max
+        // Validasi input
         $request->validate([
             'user_id' => 'required',
             'house_id' => 'required',
             'sale_date' => 'required|date',
-            'total_price' => 'required|integer|min:0|max:999999999999|gt:0', // harga minimal 100 ribu, maksimal 10 miliar
+            'total_price' => 'required|integer|min:0|max:10000000000', // Validasi harga minimal 0 dan max 10 miliar
         ], [
-            'total_price.gt' => 'Harga tidak boleh negatif atau nol.', // pesan error untuk harga negatif
-            'total_price.min' => 'Harga melebihi Batas', // pesan error untuk harga minimal
-            'total_price.max' => 'Harga tidak boleh lebih dari Rp10.000.000.000', // pesan error untuk harga maksimal
+            'total_price.min' => 'Harga tidak boleh nol atau negatif.',
+            'total_price.max' => 'Harga tidak boleh lebih dari Rp10.000.000.000.',
         ]);
 
         // Cek apakah rumah sudah terjual
-        $existingSale = Sale::where('house_id', $request->house_id)->first();
-        if ($existingSale) {
+        if (Sale::where('house_id', $request->house_id)->exists()) {
             return redirect()->back()->with('error', 'Rumah ini sudah terjual!');
         }
 
@@ -49,18 +45,13 @@ class SaleController extends Controller
         Sale::create($request->all());
         return redirect()->route('sales.index')->with('success', 'Penjualan berhasil disimpan!');
     }
+
     public function edit($id)
     {
-        // Mengambil data penjualan berdasarkan ID
         $sale = Sale::findOrFail($id);
-
-        // Mengambil data user, house, dan fasilitas untuk form edit
         $users = User::all();
         $houses = House::all();
-        $fasilitas = Fasilitas::all();
-
-        // Menampilkan view edit dengan data yang sudah diambil
-        return view('sales.edit', compact('sale', 'users', 'houses', 'fasilitas'));
+        return view('sales.edit', compact('sale', 'users', 'houses'));
     }
 
     public function update(Request $request, $id)
@@ -70,26 +61,24 @@ class SaleController extends Controller
             'user_id' => 'required',
             'house_id' => 'required',
             'sale_date' => 'required|date',
-            'total_price' => 'required|integer|min:0|max:999999999999|gt:0', // validasi harga
+            'total_price' => 'required|integer|min:0|max:10000000000',
         ], [
-            'total_price.gt' => 'Harga tidak boleh negatif atau nol.',
-            'total_price.min' => 'Harga melebihi Batas',
-            'total_price.max' => 'Harga tidak boleh lebih dari Rp10.000.000.000',
+            'total_price.min' => 'Harga tidak boleh negatif.',
+            'total_price.max' => 'Harga tidak boleh lebih dari Rp10.000.000.000.',
         ]);
 
-        // Mengambil data penjualan berdasarkan ID
+        // Ambil data penjualan
         $sale = Sale::findOrFail($id);
 
-        // Cek apakah rumah yang diedit sudah terjual kepada orang lain
-        $existingSale = Sale::where('house_id', $request->house_id)->where('id', '!=', $id)->first();
-        if ($existingSale) {
+        // Cek apakah rumah sudah terjual ke penjualan lain
+        if (Sale::where('house_id', $request->house_id)->where('id', '!=', $sale->id)->exists()) {
             return redirect()->back()->with('error', 'Rumah ini sudah terjual ke penjualan lain!');
         }
 
-        // Update data penjualan dengan input yang baru
+        // Update penjualan
         $sale->update($request->all());
 
-        // Redirect ke halaman index dengan pesan sukses
+        // Redirect dengan pesan sukses
         return redirect()->route('sales.index')->with('success', 'Penjualan berhasil diupdate!');
     }
 }
